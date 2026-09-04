@@ -141,40 +141,6 @@
             cursor: not-allowed;
         }
         
-        .loading {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #999;
-        }
-        
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #667eea;
-            animation: bounce 1.4s infinite;
-        }
-        
-        .dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-        
         .info-text {
             font-size: 0.85em;
             color: #999;
@@ -186,13 +152,13 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            🤖 AI Chatbot
+            🤖 Simple AI Chat
         </div>
         
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
                 <div class="message-content">
-                    Hallo! 👋 Ich bin dein AI Chatbot. Wie kann ich dir heute helfen?
+                    Hallo! 👋 Ich bin ein einfacher AI Chatbot. Schreib eine Frage und ich antworte! 😊
                 </div>
             </div>
         </div>
@@ -206,7 +172,7 @@
             >
             <button id="sendBtn" onclick="sendMessage()">Senden</button>
         </div>
-        <div class="info-text">Powered by Hugging Face API (kostenlos) 🚀</div>
+        <div class="info-text">Keine Installation nötig - 100% kostenlos! 🚀</div>
     </div>
     
     <script>
@@ -214,10 +180,50 @@
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         
-        const API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill";
-        const HF_TOKEN = "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";
+        const responses = {
+            "hallo": "Hallo! Wie geht es dir? 😊",
+            "wie heißt du": "Ich bin ein AI Chatbot! Schön dich kennenzulernen! 🤖",
+            "wie geht es dir": "Mir geht es gut, danke der Nachfrage! Wie kann ich dir helfen? 😄",
+            "wer bist du": "Ich bin ein KI-Assistent, hier um dir zu helfen! 🧠",
+            "danke": "Gerne! Immer wieder bereit zu helfen! 💪",
+            "tschüss": "Auf Wiedersehen! Bis bald! 👋",
+            "bye": "Bye bye! 👋",
+            "help": "Du kannst mich alles fragen! Versuche: 'Hallo', 'Wie heißt du', etc. 📚",
+            "hilfe": "Du kannst mich alles fragen! Versuche: 'Hallo', 'Wie heißt du', etc. 📚",
+            "was ist 2+2": "2+2 = 4! 🧮",
+            "witz": "Warum haben Bücher keine Angst? Weil sie Rückhalt haben! 😂",
+            "joke": "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
+            "minecraft": "Minecraft ist ein cooles Spiel! 🎮",
+            "python": "Python ist eine großartige Programmiersprache! 🐍",
+            "javascript": "JavaScript ist perfekt für Web-Entwicklung! 💻",
+            "guten morgen": "Guten Morgen! Einen schönen Tag dir! ☀️",
+            "gute nacht": "Gute Nacht! Schlaf gut! 😴",
+        };
         
-        async function sendMessage() {
+        function getResponse(message) {
+            const msg = message.toLowerCase().trim();
+            
+            for (let key in responses) {
+                if (msg.includes(key)) {
+                    return responses[key];
+                }
+            }
+            
+            const randomResponses = [
+                "Das ist interessant! 🤔",
+                "Erzähl mir mehr! 👂",
+                "Sehr interessant! 💭",
+                "Das verstehe ich! 😊",
+                "Cool! Was noch? 🎉",
+                "Das ist eine gute Frage! 🧠",
+                "Haha, sehr witzig! 😄",
+                "Wow, interessant! ✨"
+            ];
+            
+            return randomResponses[Math.floor(Math.random() * randomResponses.length)];
+        }
+        
+        function sendMessage() {
             const message = userInput.value.trim();
             
             if (!message) return;
@@ -226,61 +232,25 @@
             userInput.value = '';
             sendBtn.disabled = true;
             
-            const loadingId = 'loading-' + Date.now();
-            addMessage('<div class="loading"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>', 'bot', loadingId);
-            
-            try {
-                const response = await fetch(API_URL, {
-                    headers: {
-                        Authorization: `Bearer ${HF_TOKEN}`,
-                    },
-                    method: "POST",
-                    body: JSON.stringify({ inputs: message }),
-                });
-                
-                if (!response.ok) {
-                    throw new Error('API Error: ' + response.status);
-                }
-                
-                const result = await response.json();
-                removeMessage(loadingId);
-                
-                let botMessage = '';
-                if (result[0] && result[0].generated_text) {
-                    botMessage = result[0].generated_text;
-                } else {
-                    botMessage = "Entschuldigung, ich konnte keine Antwort generieren. Versuche es erneut! 🤔";
-                }
-                
-                addMessage(botMessage, 'bot');
-                
-            } catch (error) {
-                removeMessage(loadingId);
-                console.error('Error:', error);
-                addMessage("Entschuldigung, es gab einen Fehler. Bitte überprüfe deine Internetverbindung und versuche es erneut! ⚠️", 'bot');
-            }
-            
-            sendBtn.disabled = false;
-            userInput.focus();
+            setTimeout(() => {
+                const response = getResponse(message);
+                addMessage(response, 'bot');
+                sendBtn.disabled = false;
+                userInput.focus();
+            }, 500);
         }
         
-        function addMessage(text, sender, id = null) {
+        function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
-            if (id) messageDiv.id = id;
             
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
-            contentDiv.innerHTML = text;
+            contentDiv.textContent = text;
             
             messageDiv.appendChild(contentDiv);
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        function removeMessage(id) {
-            const element = document.getElementById(id);
-            if (element) element.remove();
         }
         
         userInput.addEventListener('keypress', (e) => {

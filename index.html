@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Rickroll 🎵</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            max-width: 600px;
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+        
+        .emoji {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: spin 2s linear infinite;
+        }
+        
+        p {
+            color: #fff;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        
+        .rickroll-button {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+        }
+        
+        .rickroll-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(245, 87, 108, 0.6);
+        }
+        
+        .rickroll-button:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .lyrics {
+            color: #fff;
+            margin-top: 30px;
+            font-size: 0.9em;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎶 Du wurdest gerade Rickrolled! 🎶</h1>
+        <div class="emoji">🎵</div>
+        <p>Never Gonna Give You Up</p>
+        <button class="rickroll-button" onclick="rickroll()">Klick hier für das volle Erlebnis! 🎬</button>
+        
+        <div class="lyrics">
+            <p>🎤 Never gonna give you up 🎤</p>
+            <p>🎤 Never gonna let you down 🎤</p>
+            <p>🎤 Never gonna run around and desert you 🎤</p>
+        </div>
+    </div>
+    
+    <script>
+        function rickroll() {
+            window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+        }
+        
+        // Auto-redirect nach 3 Sekunden (optional)
+        // setTimeout(() => {
+        //     rickroll();
+        // }, 3000);
+    </script>
+</body>
+</html>
